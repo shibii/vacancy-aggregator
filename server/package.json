@@ -1,0 +1,22 @@
+{
+  "name": "vacancy-aggregator-server",
+  "version": "0.1.0",
+  "description": "backend for vacancy aggregator project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Seppo Kilpeläinen",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^4.0.0",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^7.18.1",
+    "pg-promise": "^10.4.3"
+  }
+}

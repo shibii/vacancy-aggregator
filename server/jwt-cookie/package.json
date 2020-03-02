@@ -1,0 +1,11 @@
+{
+  "name": "@shibii/jwt-cookie-middleware",
+  "version": "0.1.0",
+  "description": "naive and most certainly unsafe express middleware for jwt cookie authentication",
+  "license": "ISC",
+  "author": "Seppo Kilpeläinen",
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {}
+}
