@@ -21,6 +21,7 @@ app.use(
   })
 );
 
+app.use("/api", require("./routes/me"));
 app.use("/api", require("./routes/vacancies"));
 
 app.use(jwtCookie.ErrorHandler());
