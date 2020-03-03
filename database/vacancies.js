@@ -7,6 +7,10 @@ module.exports = (db, pgp) => {
     return db.any(sql.vacancies.getHidden, { userId });
   };
 
+  vacancies.getPinned = async userId => {
+    return db.any(sql.vacancies.getPinned, { userId });
+  };
+
   vacancies.query = async (str, userId) => {
     return db.any(sql.vacancies.query, { terms: str, userId });
   };
