@@ -3,6 +3,10 @@ const sql = require("./sql");
 module.exports = (db, pgp) => {
   let vacancies = {};
 
+  vacancies.getHidden = async userId => {
+    return db.any(sql.vacancies.getHidden, { userId });
+  };
+
   vacancies.query = async (str, userId) => {
     return db.any(sql.vacancies.query, { terms: str, userId });
   };

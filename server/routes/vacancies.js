@@ -58,6 +58,19 @@ router.post("/vacancies/:id/unhide", async (req, res, next) => {
   }
 });
 
+router.get("/vacancies/hidden", async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    if (!userId) return res.sendStatus(400);
+
+    const results = await database.vacancies.getHidden(userId);
+    return res.status(200).json(results);
+  } catch (err) {
+    // handle unexpected errors gracefully
+    return next(err);
+  }
+});
+
 router.get("/vacancies", async (req, res, next) => {
   try {
     const terms = req.query.terms;
