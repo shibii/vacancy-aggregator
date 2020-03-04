@@ -74,7 +74,6 @@ const scrape = async (page, config) => {
   try {
     vacancies = await database.vacancies.getUnparsedUrls(vacancies);
   } catch (err) {
-    console.log(err);
     log.error("Unable to query database for unparsed urls");
     throw err;
   }
