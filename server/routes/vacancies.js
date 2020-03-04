@@ -86,12 +86,27 @@ router.get("/vacancies/pinned", async (req, res, next) => {
 
 router.get("/vacancies", async (req, res, next) => {
   try {
-    const terms = req.query.terms;
+    const { terms, offsetId, limit } = req.query;
     const userId = req.user.id;
-    if (!terms || !userId) return res.sendStatus(400);
+    // only offsetId is optional
+    if (!terms || !limit || !userId) return res.sendStatus(400);
 
-    const results = await database.vacancies.query(terms, userId);
-    return res.status(200).json(results);
+    if (offsetId) {
+      const results = await database.vacancies.getFts(
+        terms,
+        userId,
+        offsetId,
+        limit
+      );
+      return res.status(200).json(results);
+    } else {
+      const results = await database.vacancies.getFtsNoOffset(
+        terms,
+        userId,
+        limit
+      );
+      return res.status(200).json(results);
+    }
   } catch (err) {
     // handle unexpected errors gracefully
     return next(err);
