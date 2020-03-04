@@ -31,7 +31,8 @@ router.post("/login", async (req, res, next) => {
     if (match) {
       try {
         token = jwt.sign(payload, process.env.JWT_SECRET_PRIVATE, {
-          algorithm: "RS256"
+          algorithm: "RS256",
+          expiresIn: process.env.JWT_EXPIRATION
         });
       } catch (err) {
         return res.sendStatus(500);
@@ -44,9 +45,7 @@ router.post("/login", async (req, res, next) => {
     return res
       .status(200)
       .cookie("token", token, {
-        expires: new Date(
-          Date.now() + parseInt(process.env.JWT_COOKIE_EXPIRATION)
-        ),
+        expires: new Date(Date.now() + parseInt(process.env.COOKIE_EXPIRATION)),
         secure: false,
         httpOnly: true
       })
