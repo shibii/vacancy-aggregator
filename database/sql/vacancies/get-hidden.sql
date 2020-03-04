@@ -5,7 +5,9 @@ SELECT v.id,
 	v.url,
 	v.header,
 	v.source,
-	v.ts
+	v.ts,
+	true as hidden,
+	CASE WHEN p.vacancy_id IS NOT NULL THEN true ELSE false END AS pinned
 FROM (
 	SELECT vacancy_id AS id
 	FROM PUBLIC.hides
@@ -19,4 +21,9 @@ LEFT JOIN (
 		ts
 	FROM vacancies
 	) v ON h.id = v.id
+LEFT JOIN (
+	SELECT pins.vacancy_id
+	FROM PUBLIC.pins
+	WHERE user_id = $<userId>
+	) p ON v.id = p.vacancy_id
 ORDER BY v.id DESC;
