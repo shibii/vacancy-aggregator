@@ -11,7 +11,7 @@ SELECT v.id,
 FROM (
 	SELECT vacancy_id AS id
 	FROM PUBLIC.pins
-	WHERE user_id = $<userId>
+	WHERE $<offsetClause:raw> user_id = $<userId>
 	) p
 LEFT JOIN (
 	SELECT id,
@@ -26,4 +26,4 @@ LEFT JOIN (
 	FROM PUBLIC.hides
 	WHERE user_id = $<userId>
 	) h ON v.id = h.vacancy_id
-ORDER BY v.id DESC;
+ORDER BY v.id DESC $<limitClause:raw>

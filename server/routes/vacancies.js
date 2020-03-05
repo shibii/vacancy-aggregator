@@ -76,10 +76,13 @@ router.get("/vacancies/hidden", async (req, res, next) => {
 
 router.get("/vacancies/pinned", async (req, res, next) => {
   try {
+    const { offsetId, limit } = req.query;
     const userId = req.user.id;
+    // userId is not optional
     if (!userId) return res.sendStatus(400);
 
-    const results = await database.vacancies.getPinned(userId);
+    let parameters = { limit, userId, offsetId };
+    const results = await database.vacancies.getPinned(parameters);
     return res.status(200).json(results);
   } catch (err) {
     // handle unexpected errors gracefully

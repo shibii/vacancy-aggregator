@@ -40,8 +40,22 @@ module.exports = (db, pgp) => {
     });
   };
 
-  vacancies.getPinned = async userId => {
-    return db.any(sql.vacancies.getPinned, { userId });
+  vacancies.getPinned = async parameters => {
+    const { userId, offsetId, limit } = parameters;
+    // search terms and userId are not optional
+    if (!userId) throw new Error("missing fields");
+
+    const offsetClause = offsetId
+      ? pgp.as.format("vacancy_id < $<offsetId> AND", { offsetId })
+      : "";
+
+    const limitClause = limit ? pgp.as.format("LIMIT $<limit>", { limit }) : "";
+
+    return db.any(sql.vacancies.getPinned, {
+      userId,
+      offsetClause,
+      limitClause
+    });
   };
 
   vacancies.insertcs = new pgp.helpers.ColumnSet(
