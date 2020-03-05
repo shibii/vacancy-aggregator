@@ -88,25 +88,12 @@ router.get("/vacancies", async (req, res, next) => {
   try {
     const { terms, offsetId, limit } = req.query;
     const userId = req.user.id;
-    // only offsetId is optional
-    if (!terms || !limit || !userId) return res.sendStatus(400);
+    // search terms and userId are not optional
+    if (!terms || !userId) return res.sendStatus(400);
 
-    if (offsetId) {
-      const results = await database.vacancies.getFts(
-        terms,
-        userId,
-        offsetId,
-        limit
-      );
-      return res.status(200).json(results);
-    } else {
-      const results = await database.vacancies.getFtsNoOffset(
-        terms,
-        userId,
-        limit
-      );
-      return res.status(200).json(results);
-    }
+    let parameters = { terms, limit, userId, offsetId };
+    const results = await database.vacancies.getFts(parameters);
+    return res.status(200).json(results);
   } catch (err) {
     // handle unexpected errors gracefully
     return next(err);

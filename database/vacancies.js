@@ -3,16 +3,23 @@ const sql = require("./sql");
 module.exports = (db, pgp) => {
   let vacancies = {};
 
-  vacancies.getFtsNoOffset = async (terms, userId, limit) => {
-    return db.any(sql.vacancies.getFtsNoOffset, {
+  vacancies.getFts = async parameters => {
+    const { terms, userId, offsetId, limit } = parameters;
+    // search terms and userId are not optional
+    if (!terms | !userId) throw new Error("missing fields");
+
+    const offsetClause = offsetId
+      ? pgp.as.format("id < $<offsetId> AND", { offsetId })
+      : "";
+
+    const limitClause = limit ? pgp.as.format("LIMIT $<limit>", { limit }) : "";
+
+    return db.any(sql.vacancies.getFts, {
       terms,
       userId,
-      limit
+      offsetClause,
+      limitClause
     });
-  };
-
-  vacancies.getFts = async (terms, userId, offsetId, limit) => {
-    return db.any(sql.vacancies.getFts, { terms, userId, offsetId, limit });
   };
 
   vacancies.getHidden = async userId => {
