@@ -6,12 +6,12 @@ SELECT v.id,
 	v.header,
 	v.source,
 	v.ts,
-	true as hidden,
+	true AS hidden,
 	CASE WHEN p.vacancy_id IS NOT NULL THEN true ELSE false END AS pinned
 FROM (
 	SELECT vacancy_id AS id
 	FROM PUBLIC.hides
-	WHERE user_id = $<userId>
+	WHERE $<offsetClause:raw> user_id = $<userId>
 	) h
 LEFT JOIN (
 	SELECT id,
@@ -26,4 +26,4 @@ LEFT JOIN (
 	FROM PUBLIC.pins
 	WHERE user_id = $<userId>
 	) p ON v.id = p.vacancy_id
-ORDER BY v.id DESC;
+ORDER BY v.id DESC $<limitClause:raw>

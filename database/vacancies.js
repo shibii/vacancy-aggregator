@@ -22,8 +22,22 @@ module.exports = (db, pgp) => {
     });
   };
 
-  vacancies.getHidden = async userId => {
-    return db.any(sql.vacancies.getHidden, { userId });
+  vacancies.getHidden = async parameters => {
+    const { userId, offsetId, limit } = parameters;
+    // search terms and userId are not optional
+    if (!userId) throw new Error("missing fields");
+
+    const offsetClause = offsetId
+      ? pgp.as.format("vacancy_id < $<offsetId> AND", { offsetId })
+      : "";
+
+    const limitClause = limit ? pgp.as.format("LIMIT $<limit>", { limit }) : "";
+
+    return db.any(sql.vacancies.getHidden, {
+      userId,
+      offsetClause,
+      limitClause
+    });
   };
 
   vacancies.getPinned = async userId => {
