@@ -32,7 +32,7 @@ router.post("/login", async (req, res, next) => {
       try {
         token = jwt.sign(payload, process.env.JWT_SECRET_PRIVATE, {
           algorithm: "RS256",
-          expiresIn: process.env.JWT_EXPIRATION
+          expiresIn: process.env.JWT_EXPIRATION,
         });
       } catch (err) {
         return res.sendStatus(500);
@@ -47,7 +47,7 @@ router.post("/login", async (req, res, next) => {
       .cookie("token", token, {
         expires: new Date(Date.now() + parseInt(process.env.COOKIE_EXPIRATION)),
         secure: false,
-        httpOnly: true
+        httpOnly: true,
       })
       .json(payload);
   } catch (err) {
@@ -59,7 +59,7 @@ router.post("/login", async (req, res, next) => {
 router.post("/logout", async (req, res, next) => {
   try {
     // unset token cookie
-    return res.cookie("token").sendStatus(200);
+    return res.cookie("token", {}).sendStatus(200);
   } catch (err) {
     // handle unexpected errors gracefully
     return next(err);
