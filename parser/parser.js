@@ -9,14 +9,14 @@ const sources = require("./sites/sources");
 const { database } = require("../database");
 const log = require("./log");
 
-const cleanHeader = str => {
+const cleanHeader = (str) => {
   return str
     .replace(/<br\/>|\\n|\\t/gm, " ")
     .replace(/\s\s+/gm, " ")
     .trim();
 };
 
-const cleanContent = strs => {
+const cleanContent = (strs) => {
   return strs
     .join(" ")
     .replace(/[^\wäö.:\-+\/]/gim, " ")
@@ -24,9 +24,9 @@ const cleanContent = strs => {
     .trim();
 };
 
-const filterIncomplete = vacancies => {
+const filterIncomplete = (vacancies) => {
   filtered = vacancies.filter(
-    vacancy => vacancy.contents !== undefined && vacancy.header !== undefined
+    (vacancy) => vacancy.contents !== undefined && vacancy.header !== undefined
   );
   if (filtered.length < vacancies.length) {
     const incomplete = vacancies.length - filtered.length;
@@ -39,7 +39,7 @@ const filterIncomplete = vacancies => {
 const scrape = async (page, config) => {
   try {
     await page.goto(config.url, {
-      timeout: process.env.PUPPETEER_NAVIGATION_TIMEOUT
+      timeout: process.env.PUPPETEER_NAVIGATION_TIMEOUT,
     });
   } catch (err) {
     log.info("Unable to go to page: " + config.url);
@@ -60,14 +60,14 @@ const scrape = async (page, config) => {
   await page.waitForXPath(config.linkSelector);
   let linkHandles = await page.$x(config.linkSelector);
   let vacancies = await Promise.all(
-    linkHandles.map(handle =>
-      page.evaluate(handle => ({ url: handle.href }), handle)
+    linkHandles.map((handle) =>
+      page.evaluate((handle) => ({ url: handle.href }), handle)
     )
   );
 
   // clean url
   if (config.cleanUrl) {
-    vacancies.map(vacancy => (vacancy.url = config.cleanUrl(vacancy.url)));
+    vacancies.map((vacancy) => (vacancy.url = config.cleanUrl(vacancy.url)));
   }
 
   // leave only new vacancies
@@ -81,7 +81,7 @@ const scrape = async (page, config) => {
   for (let i = 0; i < vacancies.length; i++) {
     try {
       await page.goto(vacancies[i].url, {
-        timeout: process.env.PUPPETEER_NAVIGATION_TIMEOUT
+        timeout: process.env.PUPPETEER_NAVIGATION_TIMEOUT,
       });
       // call prep function if present
       if (config.beforeContent) {
@@ -95,7 +95,7 @@ const scrape = async (page, config) => {
       await page.waitForXPath(config.headerSelector);
       const [headerHandle] = await page.$x(config.headerSelector);
       const header = await page.evaluate(
-        header => header.textContent,
+        (header) => header.textContent,
         headerHandle
       );
       vacancies[i].header = cleanHeader(header);
@@ -104,8 +104,8 @@ const scrape = async (page, config) => {
       await page.waitForXPath(config.contentSelector);
       let contentHandles = await page.$x(config.contentSelector);
       let contents = await Promise.all(
-        contentHandles.map(handle =>
-          page.evaluate(handle => handle.textContent, handle)
+        contentHandles.map((handle) =>
+          page.evaluate((handle) => handle.textContent, handle)
         )
       );
       vacancies[i].contents = cleanContent(contents);
@@ -121,7 +121,7 @@ const scrape = async (page, config) => {
   log.info("start parsing");
   const start = new Date();
   const browser = await puppeteer.launch({
-    headless: true
+    headless: true,
   });
   const page = await browser.newPage();
   page.setDefaultTimeout(process.env.PUPPETEER_GLOBAL_TIMEOUT);
