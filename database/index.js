@@ -15,7 +15,10 @@ const pgp = pgPromise({
 
 // return timestamp as a string instead of a date object
 let types = pgp.pg.types;
-types.setTypeParser(1114, (str) => str);
+types.setTypeParser(1114, (str) =>
+  //remove postfix
+  str.replace(/\.[^.]*$/, "")
+);
 
 const database = pgp({
   host: process.env.DB_HOST,
