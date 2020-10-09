@@ -15,9 +15,11 @@ const pgp = pgPromise({
 
 // return timestamp as a string instead of a date object
 let types = pgp.pg.types;
+// this avoids recreating the regex object each function call
+const re = /\.[^.]*$/;
 types.setTypeParser(1114, (str) =>
   //remove postfix
-  str.replace(/\.[^.]*$/, "")
+  str.replace(re, "")
 );
 
 const database = pgp({
