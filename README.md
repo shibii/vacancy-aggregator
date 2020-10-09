@@ -1,8 +1,10 @@
 Vacancy aggregator study project.
 
-This project consists of a parser/crawler that collects new job vacancy ads from multiple sources, rest-like api server that provides full-text-search for said ads and a frontend web client to browse them.
+This project consists of a parser/crawler that collects new job vacancy ads from multiple sources, rest-like api server that provides full-text-search for said ads and a couple of simple frontend web clients to browse them.
 
-The client is made with React.
+The clients are on their own repositories:
+https://github.com/shibii/va-client-react.git
+https://github.com/shibii/va-client-svelte.git
 
 The parser/crawler uses puppetteer to collect new job vacancy ads and inserts them into postgres database.
 
