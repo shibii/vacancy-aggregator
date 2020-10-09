@@ -10,18 +10,19 @@ const pgp = pgPromise({
   extend(obj, dc) {
     obj.vacancies = vacancies(obj, pgp);
     obj.users = users(obj, pgp);
-  }
+  },
 });
 
+// return timestamp as a string instead of a date object
 let types = pgp.pg.types;
-types.setTypeParser(1114, str => str);
+types.setTypeParser(1114, (str) => str);
 
 const database = pgp({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   database: process.env.DB_DATABASE,
   user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD
+  password: process.env.DB_PASSWORD,
 });
 
 module.exports = { database, pgp };
