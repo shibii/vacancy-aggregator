@@ -4,11 +4,11 @@
 
 **_NOTE: This codebase is an out of date javascript implementation of the vacancy-aggregator stack. An up to date typescript implementation is broken into following repositories:_**
 
-- **_frontend:_**
+- **_backend:_**
   - [va-server](https://github.com/shibii/va-server)
   - [va-database](https://github.com/shibii/va-database)
   - [va-crawler](https://github.com/shibii/va-crawler)
-- **_backend_**
+- **_frontend_**
   - [va-client-svelte](https://github.com/shibii/va-client-svelte)
   - [va-client-react](https://github.com/shibii/va-client-react)
 
